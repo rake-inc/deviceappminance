@@ -1,5 +1,5 @@
 from deviceapp.app import app, BaseTask
-from deviceapp.app import Emailer
+# from deviceapp.app import Emailer
 
 @app.task(base=BaseTask)
 def send_mail(email, number):

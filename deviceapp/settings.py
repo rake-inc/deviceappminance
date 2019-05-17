@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'employee.apps.EmployeeConfig',
     'device.apps.DeviceConfig',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -142,9 +143,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-# Mailchimp feature
-# from mailchimp import Mailchimp
-# mailchimp = Mailchimp(api_key)
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/

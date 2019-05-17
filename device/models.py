@@ -3,7 +3,7 @@ from django.db import models
 import uuid
 from django.core.exceptions import ValidationError
 from deviceapp.app import app
-from .tasks import send_mail
+from .task import send_mail
 # Create your models here.
 
 
