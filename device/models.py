@@ -16,5 +16,6 @@ class Device(models.Model):
     def save(self, *args, **kwargs):
         if not self.employee or not self.number:
             raise ValidationError("Please enter the required fields")
-        send_mail.apply_async((self.employee.email, str(self.number)))
+        if self.active:
+            send_mail.apply_async((self.employee.email, str(self.number)))
         super(Device, self).save(args, kwargs)
