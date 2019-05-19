@@ -1,7 +1,7 @@
 from deviceapp.app import app, BaseTask
 # from deviceapp.app import Emailer
 
-@app.task(base=BaseTask)
+@app.task(base=BaseTask, name='device.task.send_mail')
 def send_mail(email, number):
     # enable for mailchimp
     # mailchimp.campaigns.send(email_id)

@@ -4,3 +4,4 @@ from .models import Employee
 class EmployeeSerializer(BaseHyperLinkedSerializer):
     class Meta:
         model = Employee
+        fields = '__all__'

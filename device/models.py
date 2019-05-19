@@ -10,10 +10,11 @@ from .task import send_mail
 class Device(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid1)
     employee = models.ForeignKey('employee.Employee', on_delete=models.CASCADE)
-    number = models.IntegerField(null=False, unique=True)
+    number = models.TextField(null=False, unique=True)
+    active = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.employee or not self.number:
             raise ValidationError("Please enter the required fields")
-        send_mail.apply_async((self.employee.email, self.number))
+        send_mail.apply_async((self.employee.email, str(self.number)))
         super(Device, self).save(args, kwargs)

@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from deviceapp.views import BaseView
 from django.core.exceptions import ValidationError
+from rest_framework import status
 from django.db.utils import IntegrityError
 from .models import Device
 from employee.models import Employee
 from .serializer import DeviceSerializer
-
+from rest_framework.serializers import UUIDField
 # Create your views here.
 
 class DeviceListView(BaseView):
@@ -13,21 +14,23 @@ class DeviceListView(BaseView):
         pk = kwargs['pk']
         
         try:
-            emp_obj = Employee.objects.get(pk=emp_pk)
+            emp_obj = Employee.objects.get(pk=pk)
             devices = Device.objects.filter(employee=emp_obj)
         except (IntegrityError, Employee.DoesNotExist):
             return status.HTTP_417_EXPECTATION_FAILED
 
         instance = DeviceSerializer(
-                instance=obj,
+                instance=devices,
+                # lookup_field="employee",
                 context={'request':None},
                 read_only=True,
+                # allow_null=True,
                 many=True
             )
-        return instance.data
+        return instance
 
     def post(self, request, *args, **kwargs):
-        pk = kwargs['pk']
+        emp_pk = kwargs['emp_pk']
         
         try:
             emp_obj = Employee.objects.get(pk=emp_pk)
@@ -35,9 +38,10 @@ class DeviceListView(BaseView):
             return status.HTTP_417_EXPECTATION_FAILED
 
         data = dict(request.data.copy())
+        data['employee'] = emp_obj
         try:
-            employee_obj = Device(**data)
-            employee_obj.save()
+            device = Device(**data)
+            device.save()
         except (IntegrityError, ValidationError):
             return status.HTTP_400_BAD_REQUEST
         return status.HTTP_201_CREATED
@@ -50,17 +54,17 @@ class DeviceDetailView(BaseView):
         query = request.query_params.dict().copy()
 
         try:
-            emp_obj = Employee.objects.get(pk=pk)
+            emp_obj = Employee.objects.get(pk=emp_pk)
         except Employee.DoesNotExist:
             return status.HTTP_404_NOT_FOUND
         except ValidationError:
             return status.HTTP_417_EXPECTATION_FAILED
 
         try:
-            device_obj = Device.objects.get(pk=pk)
-            if device_obj.employee.pk != employee.pk:
+            device_obj = Device.objects.get(pk=device_pk)
+            if device_obj.employee.pk != emp_obj.pk:
                 raise ValidationError("Device does not belong to the employee")
-            obj.update(**query)
+            device_obj.update(**query)
         except Device.DoesNotExist:
             return status.HTTP_404_NOT_FOUND
         except ValidationError:
@@ -74,14 +78,14 @@ class DeviceDetailView(BaseView):
         device_pk = kwargs['device_pk']
 
         try:
-            emp_obj = Employee.objects.get(pk=pk)
+            emp_obj = Employee.objects.get(pk=emp_pk)
         except Employee.DoesNotExist:
             return status.HTTP_404_NOT_FOUND
         except ValidationError:
             return status.HTTP_417_EXPECTATION_FAILED
 
         try:
-            device_obj = Device.objects.get(pk=pk)
+            device_obj = Device.objects.get(pk=device_pk)
             device_obj.delete()
         except Device.DoesNotExist:
             return status.HTTP_404_NOT_FOUND

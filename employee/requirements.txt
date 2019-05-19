@@ -1,0 +1,6 @@
+django==2.1
+djangorestframework
+django-extensions
+ujson
+drf_ujson
+celery

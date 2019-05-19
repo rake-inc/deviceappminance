@@ -99,6 +99,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'deviceapp.wsgi.application'
 
 

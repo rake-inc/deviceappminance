@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from deviceapp.views import BaseView
 from employee.serializer import EmployeeSerializer
+from rest_framework import status
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from .models import Employee
@@ -17,7 +18,7 @@ class EmployeeListView(BaseView):
                 read_only=True,
                 many=True
             )
-        return instance.data
+        return instance
 
     def post(self, request, *args, **kwargs):
         data = dict(request.data.copy())
@@ -42,7 +43,7 @@ class EmployeeDetailView(BaseView):
         instance = EmployeeSerializer(
                 instance=obj, context={'request':None}
             )
-        return instance.data
+        return instance
 
     def patch(self, request, *args, **kwargs):
         pk = kwargs['pk']

@@ -25,9 +25,8 @@ class Employee(models.Model):
         device_objects = Device.objects.filter(employee=self)
 
         for device in device_objects:
-            try:
-                device.delete()
-            except:
-                pass
-
+            
+            device.active = False
+            device.save()
+            
         super(Employee, self).delete(args, kwargs)

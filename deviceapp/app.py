@@ -1,9 +1,8 @@
 from celery import Celery, Task
-
+# from .celeryconfig import app
 app = Celery()
 
 app.config_from_object('deviceapp.celeryconfig')
-
 # Mailchimp feature
 # from mailchimp import Mailchimp
 # Emailer = Mailchimp(api_key)
