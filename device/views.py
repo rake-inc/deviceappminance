@@ -30,7 +30,7 @@ class DeviceListView(BaseView):
         return instance
 
     def post(self, request, *args, **kwargs):
-        emp_pk = kwargs['emp_pk']
+        emp_pk = kwargs['pk']
         
         try:
             emp_obj = Employee.objects.get(pk=emp_pk)
