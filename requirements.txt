@@ -4,3 +4,4 @@ django-extensions
 ujson
 drf_ujson
 celery
+django-cors-headers
