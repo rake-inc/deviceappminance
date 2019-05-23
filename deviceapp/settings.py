@@ -112,7 +112,7 @@ DATABASES = {
         'NAME': 'demo',
         'USER': 'postgres',
         'PASSWORD': 'crunchbang',
-        'HOST': '172.21.0.1',
+        'HOST': 'postgres',
         'PORT': '5432',
     }
 }
